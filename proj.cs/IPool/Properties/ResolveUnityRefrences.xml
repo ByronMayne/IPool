@@ -1,0 +1,24 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- 
+  | This script is just used to make it quick to change our Unity version. If you 
+  | want to target version change the Unity version and copy your libraries into the libs
+  | folder in the root of the project file.
+  -->
+  <!-- A property group is a region where you define variables. If assigned multiple times the last one is kept. -->
+  <PropertyGroup>
+    <!-- These variables are used in our .cspoj MSBuild file -->
+    <UnityVersion>5.3.1f1</UnityVersion>
+    <UnityPathLibsDir>lib\Unity_$(UnityVersion)\</UnityPathLibsDir>
+    <!-- Hint is used for references in MSBuild -->
+    <UnityEngineHint>$(UnityPathLibsDir)UnityEngine.dll</UnityEngineHint>
+    <UnityEditorHint>$(UnityPathLibsDir)UnityEditor.dll</UnityEditorHint>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="UnityEditor">
+      <HintPath>$(UnityEditorHint)</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.dll">
+      <HintPath>$(UnityEngineHint)</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>

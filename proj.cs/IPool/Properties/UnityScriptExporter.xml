@@ -1,0 +1,30 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- 
+  | This is used to export all the scripts from our visual studio project to the Unity project 
+  | but will ignore AssemblyInfo.cs since that is not needed. I have to do a wild card search s
+  | since I want the user to be able to name the scripts what they want.
+  -->
+  <PropertyGroup>
+    <!-- Where we export too -->
+    <UnityProjectPath>$(SolutionDir)..\proj.unity\Assets\$(TargetName)\</UnityProjectPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- This is written to allow the user to write any number of new scripts and have them
+    be exported to Unity. In this case we just don't want to export LayersGeneratorDemo.cs and AssemblyInfo.cs -->
+    <SourceFiles Include="$(ProjectDir)**\*.cs"
+                 Exclude="$(ProjectDir)**\LayersGeneratorDemo.cs;$(ProjectDir)**\AssemblyInfo.cs;$(ProjectDir)**\LayersGeneratorDemo.cs;$(ProjectDir)**\obj\**\*.cs"/>
+  </ItemGroup>
+  <!-- AfterBuild is called as you guess after building -->
+  <Target Name="AfterBuild">
+    <Message Text="-= Exporting Scripts to Unity =-" Importance="high"/>
+    <!-- Call our function to copy the scripts -->
+    <CallTarget Targets="CopyFileToUnityProject"/>
+    <Message Text="-= Scripts Export complete =-" Importance="high"/>
+  </Target>
+  <!-- This gets called once for every file inside the SourceCode "array" -->
+  <!-- @(SourceCode) are items defined in the .cspoj. Every script you see is a SourceCode item -->
+  <Target Name="CopyFileToUnityProject" Inputs="@(SourceFiles)" Outputs="@(SourceFiles.Dummy)">
+    <Message Text="Copying | $([MSBuild]::MakeRelative($(ProjectDir), %(SourceFiles.Identity)))" Importance="high"/>
+    <Copy SourceFiles="%(SourceFiles.Identity)" DestinationFiles="$(UnityProjectPath)$([MSBuild]::MakeRelative($(ProjectDir), %(SourceFiles.Identity)))"/>
+  </Target>
+</Project>

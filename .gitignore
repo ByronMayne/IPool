@@ -1,3 +1,7 @@
 proj.unity/Library/
 proj.cs/IPool/obj/
 proj.cs/IPoolUnitTests/obj/
+proj.unity/proj.unity.CSharp.Editor.csproj
+proj.unity/proj.unity.CSharp.csproj
+proj.unity/proj.unity.sln
+proj.unity/Temp/

@@ -30,11 +30,27 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="nunit.framework">
+      <HintPath>lib\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="TinyJSON">
+      <HintPath>lib\TinyJSON.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NUnitTest1.cs" />
+    <Compile Include="PoolManagerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IPool\IPool.csproj">
+      <Project>{46e2489d-1f2c-44eb-a5e4-3b75cd712ef3}</Project>
+      <Name>IPool</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UnityEngineUnitTestDummy\UnityEngineUnitTest.csproj">
+      <Project>{fcd37a10-8d83-464f-9636-68d4f8df57e2}</Project>
+      <Name>UnityEngineUnitTest</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
