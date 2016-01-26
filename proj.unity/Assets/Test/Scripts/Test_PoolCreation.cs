@@ -24,7 +24,7 @@ public class Test_PoolCreation : MonoBehaviour
 
   private IEnumerator TestRoutine()
   {
-    for (int i = 0; i < 25; i++)
+    for (int i = 0; i < 10; i++)
     {
       GameObject go = m_Pool.GetNextAvaiable();
 
@@ -34,11 +34,11 @@ public class Test_PoolCreation : MonoBehaviour
 
       PooledObject pooled = go.GetComponent<PooledObject>();
 
-      yield return new WaitForSeconds(0.1f);
+      yield return new WaitForSeconds(0.05f);
 
       pooled.Deallocate();
 
-      yield return new WaitForSeconds(0.1f);
+      yield return new WaitForSeconds(0.05f);
     }
 
     if(m_Parent.childCount < 2)

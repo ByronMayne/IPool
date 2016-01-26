@@ -64,14 +64,12 @@ namespace PoolSystem
     {
       if (m_Head is PooledObjectTail || m_Head is PooledObjectHead)
       {
-        Debug.Log("Making new instance since head is tail");
         //We have nothing left in the queue. 
         GameObject newObj = m_Pool.CreateAndAllocateObject();
         return (IPooledObject)newObj.GetComponent(typeof(IPooledObject)); ;
       }
       else
       {
-        Debug.Log("<color=green><b> REUSING </b></color>");
         IPooledObject oldHead = m_Head;
         m_Head.RemoveLink();
         m_Head = oldHead.previous;
