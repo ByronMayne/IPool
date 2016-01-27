@@ -5,6 +5,9 @@ namespace PoolSystem
 {
   public class PoolManager : MonoBehaviour
   {
+    /// <summary>
+    /// 
+    /// </summary>
     private static PoolManager m_Instance;
     internal static PoolManager instance
     {
@@ -82,7 +85,6 @@ namespace PoolSystem
 
       if (pooledObj == null)
       {
-        Debug.LogWarning("No PooledObject component was found on " + prefab.name + ". One was added for you but you are most likely not using pooling right if this is the case");
         pooledObj = prefab.AddComponent<PooledObject>(); 
       }
 
@@ -133,7 +135,7 @@ namespace PoolSystem
     /// <param name="position">The position where you want it to spawn</param>
     /// <param name="quaternion">The rotation you want it to spawn with.</param>
     /// <returns>The GameObject that was grabed from the pool.</returns>
-    public static GameObject Instantiate(string resourcePath, Vector3 position, Quaternion quaternion)
+    public static GameObject Instantiate(string resourcePath, Vector3 position, Quaternion ratation)
     {
       if (!instance.poolMap.ContainsKey(resourcePath))
       {
