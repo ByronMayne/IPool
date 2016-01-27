@@ -1,85 +1,138 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace PoolSystem
 {
-  public class PoolManager : MonoBehaviour 
+  public class PoolManager
   {
-    /// <summary>
-    /// Gets or sets the HashSet that contains a list of our
-    /// <see cref="PooledObject"/>s. 
-    /// </summary>
-    public List<Pool> pools
+    public PoolManager()
     {
-      get
-      {
-        return m_Pools;
-      }
-
-      set
-      {
-        m_Pools = value;
-      }
+      m_PoolMap = new Dictionary<string, Pool>();
     }
 
-    private static PoolManager m_Instance;
-
-    internal static PoolManager instance
-    {
-      get
-      {
-        Initialize();
-        return m_Instance;
-      }
-    }
-
-    private Dictionary<string, string> m_ResourcesMap;
-    private Dictionary<string, GameObject> m_PrefabMap;
-    private List<Pool> m_Pools;
+    private Dictionary<string, Pool> m_PoolMap;
 
     /// <summary>
-    /// Call this function to Initialize the Pool Manager if it has not already done so.
+    /// Gets or sets entries into our pool map. This map is used
+    /// to link resource paths to pools. One pool for each object
+    /// in the resources folder.
     /// </summary>
-    [RuntimeInitializeOnLoadMethod]
-    public static void Initialize()
+    private Dictionary<string, Pool> poolMap
     {
-      if (m_Instance == null)
-      {
-        GameObject go = new GameObject("PoolManager");
-        m_Instance = go.AddComponent<PoolManager>();
-        instance.m_ResourcesMap = new Dictionary<string, string>();
-        instance.m_PrefabMap = new Dictionary<string, GameObject>();
-        instance.m_Pools = new List<Pool>(); 
-        DontDestroyOnLoad(go);
-      }
+      get { return  m_PoolMap; }
+      set { m_PoolMap = value; }
     }
 
-    public static void AddPool(Pool pool)
+    /// <summary>
+    /// Creates a new Pool object and returns it back to you.
+    /// </summary>
+    /// <param name="resourcePath">The path to the prefab in the resource folder that this pool controls.</param>
+    /// <returns>The newly created pool or an old one if it is already a thing.</returns>
+    public static Pool CreatePool(string resourcePath)
     {
-      instance.pools.Add(pool);
+      return CreatePool(resourcePath, 0);
     }
-    
-    public static GameObject InstantiateByID(string m_PoolID)
-    {
-      if (instance.m_PrefabMap.ContainsKey(m_PoolID))
-      {
-        return GameObject.Instantiate(instance.m_PrefabMap[m_PoolID]);
-      }
-      else
-      {
-        if (instance.m_ResourcesMap.ContainsKey(m_PoolID))
-        {
-          GameObject go = Resources.Load<GameObject>(instance.m_ResourcesMap[m_PoolID]);
 
-          if (go != null)
-          {
-            instance.m_PrefabMap[m_PoolID] = go;
-            return go;
-          }
-        }
+    /// <summary>
+    /// Creates a new Pool object and returns it back to you.
+    /// </summary>
+    /// <param name="resourcePath">The path to the prefab in the resource folder that this pool controls.</param>
+    /// <param name="poolSize">The target size that you want the pool to be.</param>
+    /// <returns>The newly created pool or an old one if it is already a thing.</returns>
+    public static Pool CreatePool(string resourcePath, int poolSize)
+    {
+      if(string.IsNullOrEmpty(resourcePath))
+      {
+        throw new System.ArgumentNullException("ResourcePath must have a valid and can't be null");
+      }
+
+      if(PoolBehaviour.instance.poolMap.ContainsKey(resourcePath))
+      {
+        // We already have a pool created for this item. 
+        return PoolBehaviour.instance.poolMap[resourcePath];
+      }
+
+      GameObject prefab = Resources.Load<GameObject>(resourcePath);
+
+      if(prefab == null)
+      {
+        throw new System.ArgumentNullException("Unable to load prefab at '" + resourcePath + "'. Please make sure this object exists");
+      }
+
+      PooledObject pooledObj = prefab.GetComponent<PooledObject>();
+
+      if (pooledObj == null)
+      {
+        pooledObj = prefab.AddComponent<PooledObject>(); 
+      }
+
+      // Create a new instance of our pool 
+      Pool pool = new Pool(prefab);
+
+      // Set the target size
+      pool.SetPoolSize(poolSize);
+
+      //Return it back to the client. 
+      return pool;
+    }
+
+    /// <summary>
+    /// Given a resourcePath this finds the pool that is in charge of that 
+    /// resource. If none exists null is returned. 
+    /// </summary>
+    /// <param name="resourcePath">The path to the Resource that you want the pool for.</param>
+    /// <returns>The pool that is in control of the resource at the path you sent 
+    /// in or null if it does not exists.</returns>
+    public static Pool GetPool(string resourcePath)
+    {
+      if(PoolBehaviour.instance.poolMap.ContainsKey(resourcePath))
+      {
+        return PoolBehaviour.instance.poolMap[resourcePath];
       }
       return null;
+    }
+
+    /// <summary>
+    /// Instantiates a object from the Resource folder. If the object does not have a 
+    /// pool create one will be made. Note that any prefab created with this function must
+    /// have a PooledObject component at it's root. 
+    /// </summary>
+    /// <param name="resourcePath">The path to the resources folder.</param>
+    /// <returns>The GameObject that was grabbed from the pool.</returns>
+    public static GameObject Instantiate(string resourcePath)
+    {
+      return Instantiate(resourcePath, Vector3.zero, Quaternion.identity);
+    }
+
+    /// <summary>
+    /// Instantiates a object from the Resource folder. If the object does not have a 
+    /// pool create one will be made. Note that any prefab created with this function must
+    /// have a PooledObject component at it's root. 
+    /// </summary>
+    /// <param name="resourcePath">The path to the resources folder.</param>
+    /// <param name="position">The position where you want it to spawn</param>
+    /// <param name="quaternion">The rotation you want it to spawn with.</param>
+    /// <returns>The GameObject that was grabbed from the pool.</returns>
+    public static GameObject Instantiate(string resourcePath, Vector3 position, Quaternion ratation)
+    {
+      if (!PoolBehaviour.instance.poolMap.ContainsKey(resourcePath))
+      {
+        GameObject prefab = Resources.Load<GameObject>(resourcePath);
+
+        if(prefab != null)
+        {
+          PoolBehaviour.instance.poolMap[resourcePath] = new Pool(prefab);
+        }
+        else
+        {
+          throw new System.ArgumentNullException("Unable to load prefab at '" + 
+            resourcePath + "'. Make sure this object exists and is in the resources folder");
+        }
+      }
+      GameObject go = PoolBehaviour.instance.poolMap[resourcePath].GetNextAvaiable();
+      go.transform.position = position;
+      go.transform.localRotation = ratation;
+      return go; 
     }
   }
 }

@@ -38,6 +38,7 @@
     <Compile Include="Pooled Object\PooledObjectAnchors.cs" />
     <Compile Include="PoolManager.cs" />
     <Compile Include="Pooled Object\PooledObject.cs" />
+    <Compile Include="PoolBehaviour.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

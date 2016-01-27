@@ -91,7 +91,7 @@ namespace PoolSystem
     /// </summary>
     public void Deallocate()
     {
-      m_Pool.Deallocate(this);
+      pool.Deallocate(this);
     }
 
     /// <summary>

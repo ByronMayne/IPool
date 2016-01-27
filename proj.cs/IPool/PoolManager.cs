@@ -3,20 +3,13 @@ using UnityEngine;
 
 namespace PoolSystem
 {
-  public class PoolManager : MonoBehaviour
+  public class PoolManager
   {
-    /// <summary>
-    /// 
-    /// </summary>
-    private static PoolManager m_Instance;
-    internal static PoolManager instance
+    public PoolManager()
     {
-      get
-      {
-        Initialize();
-        return m_Instance;
-      }
+      m_PoolMap = new Dictionary<string, Pool>();
     }
+
     private Dictionary<string, Pool> m_PoolMap;
 
     /// <summary>
@@ -28,21 +21,6 @@ namespace PoolSystem
     {
       get { return  m_PoolMap; }
       set { m_PoolMap = value; }
-    }
-
-    /// <summary>
-    /// Call this function to Initialize the Pool Manager if it has not already done so.
-    /// </summary>
-    [RuntimeInitializeOnLoadMethod]
-    public static void Initialize()
-    {
-      if (m_Instance == null)
-      {
-        GameObject go = new GameObject("PoolManager");
-        m_Instance = go.AddComponent<PoolManager>();
-        instance.m_PoolMap = new Dictionary<string, Pool>();
-        DontDestroyOnLoad(go);
-      }
     }
 
     /// <summary>
@@ -68,10 +46,10 @@ namespace PoolSystem
         throw new System.ArgumentNullException("ResourcePath must have a valid and can't be null");
       }
 
-      if(instance.poolMap.ContainsKey(resourcePath))
+      if(PoolBehaviour.instance.poolMap.ContainsKey(resourcePath))
       {
         // We already have a pool created for this item. 
-        return instance.poolMap[resourcePath];
+        return PoolBehaviour.instance.poolMap[resourcePath];
       }
 
       GameObject prefab = Resources.Load<GameObject>(resourcePath);
@@ -107,9 +85,9 @@ namespace PoolSystem
     /// in or null if it does not exists.</returns>
     public static Pool GetPool(string resourcePath)
     {
-      if(instance.poolMap.ContainsKey(resourcePath))
+      if(PoolBehaviour.instance.poolMap.ContainsKey(resourcePath))
       {
-        return instance.poolMap[resourcePath];
+        return PoolBehaviour.instance.poolMap[resourcePath];
       }
       return null;
     }
@@ -120,7 +98,7 @@ namespace PoolSystem
     /// have a PooledObject component at it's root. 
     /// </summary>
     /// <param name="resourcePath">The path to the resources folder.</param>
-    /// <returns>The GameObject that was grabed from the pool.</returns>
+    /// <returns>The GameObject that was grabbed from the pool.</returns>
     public static GameObject Instantiate(string resourcePath)
     {
       return Instantiate(resourcePath, Vector3.zero, Quaternion.identity);
@@ -134,16 +112,16 @@ namespace PoolSystem
     /// <param name="resourcePath">The path to the resources folder.</param>
     /// <param name="position">The position where you want it to spawn</param>
     /// <param name="quaternion">The rotation you want it to spawn with.</param>
-    /// <returns>The GameObject that was grabed from the pool.</returns>
+    /// <returns>The GameObject that was grabbed from the pool.</returns>
     public static GameObject Instantiate(string resourcePath, Vector3 position, Quaternion ratation)
     {
-      if (!instance.poolMap.ContainsKey(resourcePath))
+      if (!PoolBehaviour.instance.poolMap.ContainsKey(resourcePath))
       {
         GameObject prefab = Resources.Load<GameObject>(resourcePath);
 
         if(prefab != null)
         {
-          instance.poolMap[resourcePath] = new Pool(prefab);
+          PoolBehaviour.instance.poolMap[resourcePath] = new Pool(prefab);
         }
         else
         {
@@ -151,7 +129,7 @@ namespace PoolSystem
             resourcePath + "'. Make sure this object exists and is in the resources folder");
         }
       }
-      GameObject go = instance.poolMap[resourcePath].GetNextAvaiable();
+      GameObject go = PoolBehaviour.instance.poolMap[resourcePath].GetNextAvaiable();
       go.transform.position = position;
       go.transform.localRotation = ratation;
       return go; 

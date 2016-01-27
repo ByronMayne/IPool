@@ -39,6 +39,8 @@ public class Test_PoolCreation : MonoBehaviour
       yield return new WaitForSeconds(0.05f);
     }
 
+    yield return new WaitForSeconds(0.5f);
+
     if(m_Parent.childCount < 2)
     {
       //We should just reuse the same object

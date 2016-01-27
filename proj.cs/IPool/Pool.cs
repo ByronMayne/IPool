@@ -83,6 +83,7 @@ namespace PoolSystem
       IPooledObject poolObj = m_DeallocatedHead.PopHead();
       m_AllocatedHead.PushHead(poolObj);
       poolObj.gameObject.SetActive(true);
+      poolObj.pool = this;
       return poolObj.gameObject;
     }
 
@@ -104,7 +105,7 @@ namespace PoolSystem
     {
       GameObject newObj = Object.Instantiate(m_Prefab);
 
-      IPooledObject linkedObject = newObj.GetComponent<PooledObject>();
+      IPooledObject linkedObject = (IPooledObject)newObj.GetComponentInChildren(typeof(IPooledObject), includeInactive: true);
 
       linkedObject.pool = this;
 

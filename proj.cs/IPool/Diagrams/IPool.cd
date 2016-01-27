@@ -9,12 +9,9 @@
   <Class Name="PoolSystem.PoolManager">
     <Position X="0.75" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAQAAQEAAgAAQAAAAAAAAgAAABAAAAIAAAAAAAAEAA=</HashCode>
+      <HashCode>AAAAAABAAAAAAQAAAAQAAAAAAABAAJAIAAAAAAACAAA=</HashCode>
       <FileName>PoolManager.cs</FileName>
     </TypeIdentifier>
-    <ShowAsCollectionAssociation>
-      <Field Name="m_Pools" />
-    </ShowAsCollectionAssociation>
   </Class>
   <Class Name="PoolSystem.PooledObject">
     <Position X="11" Y="2" Width="1.5" />

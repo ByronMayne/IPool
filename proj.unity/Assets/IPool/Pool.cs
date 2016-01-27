@@ -34,9 +34,8 @@ namespace PoolSystem
     /// Create a new instance of a pool and give it a prefab to watch
     /// </summary>
     /// <param name="prefab">The prefab that this pool is in charge of.</param>
-    public Pool(GameObject prefab)
+    internal Pool(GameObject prefab)
     {
-      PoolManager.AddPool(this);
       m_AllocatedHead = new PooledObjectHead(this);
       m_DeallocatedHead = new PooledObjectHead(this);
       m_Prefab = prefab; 
@@ -84,6 +83,7 @@ namespace PoolSystem
       IPooledObject poolObj = m_DeallocatedHead.PopHead();
       m_AllocatedHead.PushHead(poolObj);
       poolObj.gameObject.SetActive(true);
+      poolObj.pool = this;
       return poolObj.gameObject;
     }
 
@@ -105,7 +105,7 @@ namespace PoolSystem
     {
       GameObject newObj = Object.Instantiate(m_Prefab);
 
-      IPooledObject linkedObject = newObj.GetComponent<PooledObject>();
+      IPooledObject linkedObject = (IPooledObject)newObj.GetComponentInChildren(typeof(IPooledObject), includeInactive: true);
 
       linkedObject.pool = this;
 
