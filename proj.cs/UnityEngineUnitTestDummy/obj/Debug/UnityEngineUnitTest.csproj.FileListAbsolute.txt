@@ -1,5 +1,0 @@
-C:\Users\Byron M\Documents\Repositories\IPool\proj.cs\UnityEngineUnitTestDummy\bin\Debug\UnityEngine.dll
-C:\Users\Byron M\Documents\Repositories\IPool\proj.cs\UnityEngineUnitTestDummy\bin\Debug\UnityEngine.pdb
-C:\Users\Byron M\Documents\Repositories\IPool\proj.cs\UnityEngineUnitTestDummy\bin\Debug\TinyJSON.dll
-C:\Users\Byron M\Documents\Repositories\IPool\proj.cs\UnityEngineUnitTestDummy\obj\Debug\UnityEngine.dll
-C:\Users\Byron M\Documents\Repositories\IPool\proj.cs\UnityEngineUnitTestDummy\obj\Debug\UnityEngine.pdb
