@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Collections;
 
 [RequireComponent(typeof(PooledObject))]
-public class Test_AutoDeallocate : MonoBehaviour
+public class AutoDeallocate : MonoBehaviour
 {
   [SerializeField]
   private float m_Time;

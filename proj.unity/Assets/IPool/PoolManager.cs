@@ -33,6 +33,13 @@ namespace PoolSystem
       return CreatePool(resourcePath, 0);
     }
 
+    private const string BULLET_PREFAB_PATH = "d";
+
+    public void Create()
+    {
+      Pool m_BulletPool = PoolManager.CreatePool(BULLET_PREFAB_PATH, poolSize: 10);
+    }
+
     /// <summary>
     /// Creates a new Pool object and returns it back to you.
     /// </summary>

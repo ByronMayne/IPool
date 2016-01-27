@@ -26,7 +26,7 @@ public class Test_PoolCreation : MonoBehaviour
   {
     for (int i = 0; i < 10; i++)
     {
-      GameObject go = m_Pool.GetNextAvaiable();
+      GameObject go = m_Pool.Instantiate();
 
       go.transform.SetParent(m_Parent);
 

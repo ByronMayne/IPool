@@ -78,13 +78,40 @@ namespace PoolSystem
     /// and return that. 
     /// </summary>
     /// <returns>The next available object or creates a new one.</returns>
-    public GameObject GetNextAvaiable()
+    internal GameObject GetNextAvaiable()
     {
       IPooledObject poolObj = m_DeallocatedHead.PopHead();
       m_AllocatedHead.PushHead(poolObj);
       poolObj.gameObject.SetActive(true);
       poolObj.pool = this;
       return poolObj.gameObject;
+    }
+
+    /// <summary>
+    /// Instantiates a object from the Resource folder. If the object does not have a 
+    /// pool create one will be made. Note that any prefab created with this function must
+    /// have a PooledObject component at it's root. 
+    /// </summary>
+    /// <param name="resourcePath">The path to the resources folder.</param>
+    /// <returns>The GameObject that was grabbed from the pool.</returns>
+    public GameObject Instantiate()
+    {
+      return Instantiate(Vector3.zero, Quaternion.identity);
+    }
+
+    /// <summary>
+    /// Instantiates a new prefab from the pool.
+    /// </summary>
+    /// <param name="resourcePath">The path to the resources folder.</param>
+    /// <param name="position">The position where you want it to spawn</param>
+    /// <param name="quaternion">The rotation you want it to spawn with.</param>
+    /// <returns>The GameObject that was grabbed from the pool.</returns>
+    public GameObject Instantiate(Vector3 position, Quaternion ratation)
+    {
+      GameObject go = GetNextAvaiable();
+      go.transform.position = position;
+      go.transform.localRotation = ratation;
+      return go;
     }
 
     /// <summary>
