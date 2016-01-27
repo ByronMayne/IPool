@@ -153,7 +153,7 @@ namespace PoolSystem
       }
       GameObject go = instance.poolMap[resourcePath].GetNextAvaiable();
       go.transform.position = position;
-      go.transform.localRotation = quaternion;
+      go.transform.localRotation = ratation;
       return go; 
     }
   }
