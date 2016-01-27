@@ -8,6 +8,7 @@ IPool is an open source Unity pooling system. It's designed to be easy to use an
 * Unlimited amount of pools. 
 * Implemented with a custom LinkedList to boost lookup times. 
 * Easy to use instantiation and reclaming.
+* Unit tested using the [Unity Test Tools](https://www.assetstore.unity3d.com/en/#!/content/13802)
 
 ## Usage
 The API is namespaced under the `PoolSystem` and the primary class is `PoolingManager` and `PooledObject` component. IPool uses the resources folder to load all of it's assets. This was done to allow for very easy conversion between exsiting systems and IPool. To start using the pooling system all you need to know is the path to the prefab in the resources folder. The prefab should also have a `PooledObject` component on it. 
@@ -55,8 +56,7 @@ public class Bullet : MonoBehaviour
 	}
     
     /// <summary>
-    /// When the bullet hits it's target this function will be called. This should
-    /// return the bullet back to the PoolManager. 
+    /// When the bullet hits it's target this function will be called. Thi
     /// </summary>
     public void OnTargetHit()
     {
@@ -66,3 +66,5 @@ public class Bullet : MonoBehaviour
     }
 }
 ```
+
+// Note: This project is still in active development and will have more documention as progress is made.
