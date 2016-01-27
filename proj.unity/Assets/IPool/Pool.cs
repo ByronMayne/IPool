@@ -2,46 +2,70 @@
 
 namespace PoolSystem
 {
+  [System.Serializable]
   public class Pool
   {
     /// <summary>
-    /// This is the ID the relates back to our prefabs that we
-    /// are pooling. 
+    /// The head object for our Allocated objects 
     /// </summary>
-    private string m_PoolID;
+    private PooledObjectHead m_AllocatedHead = null;
 
-    private int m_TargetPoolSize;
+    /// <summary>
+    /// The head object for are deallocated objects 
+    /// </summary>
+    private PooledObjectHead m_DeallocatedHead = null;
+
+    /// <summary>
+    /// The size of our current pool. 
+    /// </summary>
     private int m_CurrentPoolSize;
+
+    /// <summary>
+    /// The size that we want to group the pool too. 
+    /// </summary>
+    private int m_TargetPoolSize;
 
     /// <summary>
     /// This is the prefab this pool is in control of.  
     /// </summary>
     private GameObject m_Prefab;
 
-    private PooledObjectHead m_AllocatedHead = null;
-    private PooledObjectHead m_DeallocatedHead = null;
-
+    /// <summary>
+    /// Create a new instance of a pool and give it a prefab to watch
+    /// </summary>
+    /// <param name="prefab">The prefab that this pool is in charge of.</param>
     public Pool(GameObject prefab)
     {
+      PoolManager.AddPool(this);
       m_AllocatedHead = new PooledObjectHead(this);
       m_DeallocatedHead = new PooledObjectHead(this);
       m_Prefab = prefab; 
     }
 
-
-    public void SetPoolSize(int poolSize)
+    /// <summary>
+    /// Create a new pooled object prefab and put it in the allocated queue.
+    /// </summary>
+    /// <returns></returns>
+    public GameObject CreateAndAllocateObject()
     {
-      m_TargetPoolSize = poolSize;
+      return CreatePooledObject(shouldAllocate: true);
     }
 
-    public GameObject GetNextAvaiable()
+    /// <summary>
+    /// Create a new pooled object and put in the deallocated queue. 
+    /// </summary>
+    /// <returns></returns>
+    public GameObject CreateObject()
     {
-      IPooledObject poolObj = m_DeallocatedHead.PopHead();
-      m_AllocatedHead.PushHead(poolObj);
-      poolObj.gameObject.SetActive(true);
-      return poolObj.gameObject;
+      return CreatePooledObject(shouldAllocate: false);
     }
 
+    /// <summary>
+    /// When ever a IPooledObject is done being used wit it call this function
+    /// which takes it from the allocated queue (if it's there) and adds it to
+    /// the deallocated queue. 
+    /// </summary>
+    /// <param name="iPooledObject">The item you want to deallocate.</param>
     public void Deallocate(IPooledObject iPooledObject)
     {
       iPooledObject.OnDeallocated();
@@ -50,14 +74,28 @@ namespace PoolSystem
       m_DeallocatedHead.PushHead(iPooledObject);
     }
 
-    public GameObject CreateObject()
+    /// <summary>
+    /// Gets the next deallocated object. If none is ready it will create a new one
+    /// and return that. 
+    /// </summary>
+    /// <returns>The next available object or creates a new one.</returns>
+    public GameObject GetNextAvaiable()
     {
-      return CreatePooledObject(shouldAllocate: false);
+      IPooledObject poolObj = m_DeallocatedHead.PopHead();
+      m_AllocatedHead.PushHead(poolObj);
+      poolObj.gameObject.SetActive(true);
+      return poolObj.gameObject;
     }
 
-    public GameObject CreateAndAllocateObject()
+    /// <summary>
+    /// Sets the pools target pool size to this value. The target size
+    /// is used to grow the queue size over a course of time. Rather 
+    /// then creating all the instances at once. 
+    /// </summary>
+    /// <param name="poolSize">The size you would like the queue to be.</param>
+    public void SetPoolSize(int poolSize)
     {
-      return CreatePooledObject(shouldAllocate: true);
+      m_TargetPoolSize = poolSize;
     }
 
     /// <summary>
@@ -87,6 +125,5 @@ namespace PoolSystem
 
       return newObj;
     }
-
   }
 }

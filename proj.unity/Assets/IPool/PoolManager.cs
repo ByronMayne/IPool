@@ -4,21 +4,22 @@ using UnityEngine;
 
 namespace PoolSystem
 {
-  public class PoolManager : MonoBehaviour
+  public class PoolManager : MonoBehaviour 
   {
     /// <summary>
     /// Gets or sets the HashSet that contains a list of our
     /// <see cref="PooledObject"/>s. 
     /// </summary>
-    public HashSet<Pool> pool
+    public List<Pool> pools
     {
       get
       {
-        throw new System.NotImplementedException();
+        return m_Pools;
       }
 
       set
       {
+        m_Pools = value;
       }
     }
 
@@ -28,14 +29,14 @@ namespace PoolSystem
     {
       get
       {
+        Initialize();
         return m_Instance;
       }
     }
 
-
     private Dictionary<string, string> m_ResourcesMap;
     private Dictionary<string, GameObject> m_PrefabMap;
-    private Dictionary<string, Pool> m_Pools; 
+    private List<Pool> m_Pools;
 
     /// <summary>
     /// Call this function to Initialize the Pool Manager if it has not already done so.
@@ -49,9 +50,14 @@ namespace PoolSystem
         m_Instance = go.AddComponent<PoolManager>();
         instance.m_ResourcesMap = new Dictionary<string, string>();
         instance.m_PrefabMap = new Dictionary<string, GameObject>();
-        instance.m_Pools = new Dictionary<string, Pool>();
+        instance.m_Pools = new List<Pool>(); 
         DontDestroyOnLoad(go);
       }
+    }
+
+    public static void AddPool(Pool pool)
+    {
+      instance.pools.Add(pool);
     }
     
     public static GameObject InstantiateByID(string m_PoolID)

@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿
 using UnityEngine;
 
 namespace PoolSystem
 {
+  [System.Serializable]
   public class PooledObject : MonoBehaviour, IPooledObject
   {
     private int m_ID = -1;
@@ -23,7 +21,7 @@ namespace PoolSystem
       set { m_Pool = value; }
     }
 
-    #region -= ILinkList =-
+    #region -= IPooledObject [LinkedList] =-
     /// <summary>
     /// The IPooledObject item before this one. 
     /// </summary>

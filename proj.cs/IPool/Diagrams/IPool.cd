@@ -1,33 +1,58 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Comment CommentText="The GameObject is Unity's type. The PoolSupervisor keeps track of this object and the client interacts with the IPool Interface. ">
-    <Position X="8.719" Y="1.062" Height="0.74" Width="2.856" />
+  <Comment CommentText="m_AllocatedHead and m_DeallocatedHead are linked lists of IPooledObjects">
+    <Position X="6.76" Y="1.771" Height="0.927" Width="1.46" />
+  </Comment>
+  <Comment CommentText="PooledObjectTail and PooledObjectHead are just used as place markers so I don't have to null check every object every time. Null checks slow down the queue as they have to look at Unity's native C++ side.">
+    <Position X="8.531" Y="2.573" Height="1.469" Width="1.929" />
   </Comment>
   <Class Name="PoolSystem.PoolManager">
-    <Position X="1.5" Y="1.5" Width="1.5" />
+    <Position X="0.75" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAQAAAAAAgAAQAAAAAAAAgIAABAAAAIAAgAAAAAEAA=</HashCode>
+      <HashCode>AAAQAAQEAAgAAQAAAAAAAAgAAABAAAAIAAAAAAAAEAA=</HashCode>
       <FileName>PoolManager.cs</FileName>
     </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Field Name="m_Pools" />
+    </ShowAsCollectionAssociation>
   </Class>
   <Class Name="PoolSystem.PooledObject">
-    <Position X="7.5" Y="2" Width="1.5" />
+    <Position X="11" Y="2" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAABAAAEABAAAhAAAAAACAAIAAEAAAAAAAgBAAAAQAA=</HashCode>
-      <FileName>PooledObject.cs</FileName>
+      <HashCode>AAABAAAEABAAAhAAAAAAKAAIAAEAAAAAAAgFQAAAQAA=</HashCode>
+      <FileName>Pooled Object\PooledObject.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="UnityEngine.GameObject" Collapsed="true">
-    <Position X="10.25" Y="2" Width="1.5" />
-    <TypeIdentifier />
-  </Class>
   <Class Name="PoolSystem.Pool">
-    <Position X="4.5" Y="2" Width="1.5" />
+    <Position X="3.25" Y="1.75" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AACAAAAAAACAAAAgAAAAAgAAAIAAABAAAAAAAAAgAAA=</HashCode>
+      <HashCode>AACAAAAAAACBABAAQAAAAgAAAIAAAhAAAAAAAAAgAAA=</HashCode>
       <FileName>Pool.cs</FileName>
     </TypeIdentifier>
   </Class>
+  <Class Name="PoolSystem.PooledObjectHead" Collapsed="true">
+    <Position X="8.5" Y="4.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAEAAAAAEAAIACAAIEAEAAAAAAggBABAAQAA=</HashCode>
+      <FileName>Pooled Object\PooledObjectAnchors.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="PoolSystem.PooledObjectTail" Collapsed="true">
+    <Position X="8.5" Y="1.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAABAIAEAEAAAAAAAAIQAAAAAAAAAAAAAAgBAAIAAAA=</HashCode>
+      <FileName>Pooled Object\PooledObjectAnchors.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Interface Name="PoolSystem.IPooledObject">
+    <Position X="6.75" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAEAAAAAEAAIACAAAAAAAAAAAAggAAAIAQAA=</HashCode>
+      <FileName>Pooled Object\IPooledObject.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>

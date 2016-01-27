@@ -30,8 +30,6 @@ public class Test_PoolCreation : MonoBehaviour
 
       go.transform.SetParent(m_Parent);
 
-      print(go.activeSelf);
-
       PooledObject pooled = go.GetComponent<PooledObject>();
 
       yield return new WaitForSeconds(0.05f);

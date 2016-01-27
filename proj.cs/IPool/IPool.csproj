@@ -33,11 +33,11 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IPooledObject.cs" />
+    <Compile Include="Pooled Object\IPooledObject.cs" />
     <Compile Include="Pool.cs" />
-    <Compile Include="PooledObjectAnchors.cs" />
+    <Compile Include="Pooled Object\PooledObjectAnchors.cs" />
     <Compile Include="PoolManager.cs" />
-    <Compile Include="PooledObject.cs" />
+    <Compile Include="Pooled Object\PooledObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
