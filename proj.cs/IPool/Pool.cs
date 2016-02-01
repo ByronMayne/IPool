@@ -16,6 +16,11 @@ namespace PoolSystem
     private int m_CurrentPoolSize = 0;
 
     /// <summary>
+    /// The parent object that all this pooled objects will be stored under. 
+    /// </summary>
+    private Transform m_Parent; 
+
+    /// <summary>
     /// The size that we want to group the pool too. 
     /// </summary>
     private int m_TargetPoolSize = 0;
@@ -42,10 +47,15 @@ namespace PoolSystem
     /// Create a new instance of a pool and give it a prefab to watch
     /// </summary>
     /// <param name="prefab">The prefab that this pool is in charge of.</param>
-    internal Pool(string resourcePath)
+    internal Pool(string resourcePath) : this(resourcePath, null) { }
+
+    internal Pool(string resourcePath, Transform parent)
     {
       m_ResourcePath = resourcePath;
       m_Prefab = Resources.Load<GameObject>(resourcePath);
+      m_Parent = parent; 
+
+      PoolManager.AddPool(this);
 
       if (m_Prefab == null)
       {
@@ -174,6 +184,8 @@ namespace PoolSystem
       {
         throw new System.NullReferenceException(newObj.name + " does not have a PooledObject component at it's root level");
       }
+
+      newObj.transform.SetParent(m_Parent);
 
       if (!shouldAllocate)
       {

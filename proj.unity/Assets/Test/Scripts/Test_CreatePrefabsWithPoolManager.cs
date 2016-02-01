@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Test_CreatePrefabsWithPoolManager : MonoBehaviour
 {
-  private const string PREFAB_PATH = "Prefabs/Cube [Auto Deallocate]";
+
   private GameObject m_Prefab;
   private Pool m_Pool;
   private Transform m_Parent;
@@ -20,7 +20,7 @@ public class Test_CreatePrefabsWithPoolManager : MonoBehaviour
 
     for (int i = 0; i < 10; i++)
     {
-      GameObject go = PoolManager.Instantiate(PREFAB_PATH);
+      GameObject go = PoolManager.Instantiate(PrefabPaths.CUBE_PATH);
 
       PooledObject pooled = go.GetComponent<PooledObject>();
 

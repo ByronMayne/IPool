@@ -5,7 +5,7 @@ using System.Collections;
 [IntegrationTest.DynamicTest("Scenes/IPoolUnitTests.unity")]
 public class Test_CreatePrefabsWithPool : MonoBehaviour
 {
-  private const string m_PrefabResoucePath = "Prefabs/Sphere";
+
   private Pool m_Pool;
   private Transform m_Parent; 
 
@@ -13,7 +13,7 @@ public class Test_CreatePrefabsWithPool : MonoBehaviour
   {
     m_Parent = new GameObject("Test_Spawning").transform;
 
-    m_Pool = PoolManager.CreatePool(m_PrefabResoucePath);
+    m_Pool = PoolManager.CreatePool(PrefabPaths.SPHERE_PATH);
 
     StartCoroutine(TestRoutine());
   }

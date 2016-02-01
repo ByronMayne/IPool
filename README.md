@@ -2,7 +2,6 @@
 
 IPool is an open source Unity pooling system. It's designed to be easy to use and only require a very small code change from normal Unity behaviour. 
 
-
 ## Features
 * Loads from Resources folder.
 * Unlimited amount of pools. 
@@ -97,3 +96,4 @@ public class Gun : MonoBehaviour
 Here is our Gun class again but this time we used `PoolManager.CreatePool(string resourcePath)`. This gives us two advantages here. First we can set our `poolSize`. This tells the pool when it is created to grow to that size at a minimum. Instead of creating all of them at once it will create the prefabs over the course of several frames. 
 
 The other advantage is that the `PoolManager` does not have to search for the `Pool` everytime you call the Instantiate function on it. This means one less lookup which means an increase in preformace for you. It is suggested you use this pattern instead of the first one we showed. 
+

@@ -69,6 +69,18 @@ namespace PoolSystem
     /// <returns>The newly created pool or an old one if it is already a thing.</returns>
     public static Pool CreatePool(string resourcePath, int poolSize)
     {
+      return CreatePool(resourcePath, poolSize, parent: null);
+    }
+
+    /// <summary>
+    /// Creates a new Pool object and returns it back to you.
+    /// </summary>
+    /// <param name="resourcePath">The path to the prefab in the resource folder that this pool controls.</param>
+    /// <param name="poolSize">The target size that you want the pool to be.</param>
+    /// <param name="parent">The parent object that all inactive prefabs will be stored under.</param>
+    /// <returns>The newly created pool or an old one if it is already a thing.</returns>
+    public static Pool CreatePool(string resourcePath, int poolSize, Transform parent)
+    {
       if (string.IsNullOrEmpty(resourcePath))
       {
         throw new System.ArgumentNullException("ResourcePath must have a valid and can't be null");
@@ -98,16 +110,26 @@ namespace PoolSystem
       }
 
       // Create a new instance of our pool 
-      pool = new Pool(resourcePath);
+      pool = new Pool(resourcePath, parent);
 
       // Set the target size
       pool.SetPoolSize(poolSize);
 
-      //Add our pool to our list of pools. 
-      PoolBehaviour.instance.m_Pools.Add(pool);
-
       //Return it back to the client. 
       return pool;
+    }
+
+    /// <summary>
+    /// Used to add a new Pool instance to the Pool Manager. Pools by default will call this function
+    /// when they are created. If the pool already exists in the list it will be ingored. 
+    /// </summary>
+    /// <param name="pool">The pool you would like to add.</param>
+    public static void AddPool(Pool pool)
+    {
+      if (!PoolBehaviour.instance.pools.Contains(pool))
+      {
+        PoolBehaviour.instance.pools.Add(pool);
+      }
     }
 
     /// <summary>
