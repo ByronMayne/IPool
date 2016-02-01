@@ -103,6 +103,9 @@ namespace PoolSystem
       // Set the target size
       pool.SetPoolSize(poolSize);
 
+      //Add our pool to our list of pools. 
+      PoolBehaviour.instance.m_Pools.Add(pool);
+
       //Return it back to the client. 
       return pool;
     }
@@ -147,7 +150,7 @@ namespace PoolSystem
       if (pool == null)
       {
         pool = CreatePool(resourcePath);
-       }
+      }
 
       GameObject go = pool.GetNextAvaiable();
       go.transform.position = position;

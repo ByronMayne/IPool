@@ -80,7 +80,6 @@ namespace PoolSystem
     /// <param name="iPooledObject">The item you want to deallocate.</param>
     public void Deallocate(IPooledObject iPooledObject)
     {
-      m_CurrentPoolSize--;
       iPooledObject.OnDeallocated();
       iPooledObject.gameObject.SetActive(false);
       m_DeallocatedStack.Push(iPooledObject);
@@ -164,6 +163,7 @@ namespace PoolSystem
     /// </summary>
     private GameObject CreatePooledObject(bool shouldAllocate)
     {
+
       GameObject newObj = Object.Instantiate(m_Prefab);
 
       IPooledObject linkedObject = (IPooledObject)newObj.GetComponentInChildren(typeof(IPooledObject), includeInactive: true);

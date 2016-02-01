@@ -24,10 +24,7 @@ public class Test_CreatePrefabsWithPoolManager : MonoBehaviour
 
       PooledObject pooled = go.GetComponent<PooledObject>();
 
-      Debug.Log("has Pool: " + (pooled.pool != null));
-
       //go.transform.SetParent(m_Parent);
-
 
       yield return new WaitForSeconds(0.5f);
     }

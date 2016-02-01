@@ -13,7 +13,7 @@ public class Test_CreatePrefabsWithPool : MonoBehaviour
   {
     m_Parent = new GameObject("Test_Spawning").transform;
 
-    m_Pool = new Pool(m_PrefabResoucePath);
+    m_Pool = PoolManager.CreatePool(m_PrefabResoucePath);
 
     StartCoroutine(TestRoutine());
   }
@@ -25,7 +25,7 @@ public class Test_CreatePrefabsWithPool : MonoBehaviour
     {
       GameObject go = m_Pool.Instantiate();
 
-      go.transform.SetParent(m_Parent);
+      //go.transform.SetParent(m_Parent);
 
       PooledObject pooled = go.GetComponent<PooledObject>();
 
