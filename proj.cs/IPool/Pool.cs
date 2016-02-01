@@ -18,12 +18,12 @@ namespace PoolSystem
     /// <summary>
     /// The size of our current pool. 
     /// </summary>
-    private int m_CurrentPoolSize;
+    private int m_CurrentPoolSize = 0;
 
     /// <summary>
     /// The size that we want to group the pool too. 
     /// </summary>
-    private int m_TargetPoolSize;
+    private int m_TargetPoolSize = 0;
 
     /// <summary>
     /// This is the prefab this pool is in control of.  
@@ -31,14 +31,33 @@ namespace PoolSystem
     private GameObject m_Prefab;
 
     /// <summary>
+    /// The path to the resources folder for this asset. 
+    /// </summary>
+    private string m_ResourcePath; 
+
+    /// <summary>
+    /// The file path to this pools prefab in the resources folder.
+    /// </summary>
+    public string resourcePath
+    {
+      get { return m_ResourcePath; }
+    }
+
+    /// <summary>
     /// Create a new instance of a pool and give it a prefab to watch
     /// </summary>
     /// <param name="prefab">The prefab that this pool is in charge of.</param>
-    internal Pool(GameObject prefab)
+    internal Pool(string resourcePath)
     {
+      m_ResourcePath = resourcePath;
+      m_Prefab = Resources.Load<GameObject>(resourcePath);
+
+      if(m_Prefab == null)
+      {
+        throw new System.ArgumentNullException("No prefab could be loaded at the path '" + resourcePath + "'");
+      }
       m_AllocatedHead = new PooledObjectHead(this);
       m_DeallocatedHead = new PooledObjectHead(this);
-      m_Prefab = prefab; 
     }
 
     /// <summary>
@@ -67,10 +86,37 @@ namespace PoolSystem
     /// <param name="iPooledObject">The item you want to deallocate.</param>
     public void Deallocate(IPooledObject iPooledObject)
     {
+      m_CurrentPoolSize--; 
       iPooledObject.OnDeallocated();
       iPooledObject.gameObject.SetActive(false);
       iPooledObject.RemoveLink();
       m_DeallocatedHead.PushHead(iPooledObject);
+    }
+
+    public void PrintQueue()
+    {
+      IPooledObject iterator = m_DeallocatedHead;
+
+      string printOut = "";
+
+      do
+      {
+        if(iterator is PooledObjectHead)
+        {
+          printOut += "{h}";
+        }
+        else if (iterator is PooledObjectTail)
+        {
+          printOut += "{t}";
+        }
+        else
+        {
+          printOut += " * ";
+        }
+        iterator = iterator.next;
+      }
+      while (iterator.next != null);
+      
     }
 
     /// <summary>
@@ -150,7 +196,22 @@ namespace PoolSystem
         m_DeallocatedHead.PushHead(linkedObject);
       }
 
+      m_CurrentPoolSize++;
+
       return newObj;
+    }
+
+    /// <summary>
+    /// This is used to check if we need to update the size of our pool. We have a target size and
+    /// a current size. If our current size is less then our target size we will create one new
+    /// item each frame until they match.
+    /// </summary>
+    internal void Update()
+    {
+      if(m_CurrentPoolSize < m_TargetPoolSize)
+      {
+        CreatePooledObject(shouldAllocate: false);
+      }
     }
   }
 }

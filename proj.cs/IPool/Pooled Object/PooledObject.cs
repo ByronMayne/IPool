@@ -6,7 +6,7 @@ namespace PoolSystem
   [System.Serializable]
   public class PooledObject : MonoBehaviour, IPooledObject
   {
-    private int m_ID = -1;
+    private int m_ID = 0;
 
     private static int m_NextID; 
 
@@ -47,6 +47,12 @@ namespace PoolSystem
     {
       get { return m_Previous; }
       set { m_Previous = value; }
+    }
+
+    protected virtual void Start()
+    {
+      m_ID = m_NextID;
+      m_NextID++;
     }
 
     /// <summary>

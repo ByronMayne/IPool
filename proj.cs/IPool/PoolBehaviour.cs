@@ -19,6 +19,14 @@ namespace PoolSystem
       m_Instance = new PoolManager();
     }
 
+    private void Update()
+    {
+      if(m_Instance != null)
+      {
+        m_Instance.UpdatePools();
+      }
+    }
+
     /// <summary>
     /// Call this function to Initialize the Pool Manager if it has not already done so.
     /// </summary>

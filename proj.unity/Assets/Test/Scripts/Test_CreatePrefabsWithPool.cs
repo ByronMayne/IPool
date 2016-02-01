@@ -3,20 +3,17 @@ using PoolSystem;
 using System.Collections;
 
 [IntegrationTest.DynamicTest("Scenes/IPoolUnitTests.unity")]
-public class Test_PoolCreation : MonoBehaviour
+public class Test_CreatePrefabsWithPool : MonoBehaviour
 {
   private const string m_PrefabResoucePath = "Prefabs/Sphere";
   private Pool m_Pool;
-  private GameObject m_Prefab;
   private Transform m_Parent; 
 
   public void Awake()
   {
-    m_Prefab = Resources.Load<GameObject>(m_PrefabResoucePath);
-
     m_Parent = new GameObject("Test_Spawning").transform;
 
-    m_Pool = new Pool(m_Prefab);
+    m_Pool = new Pool(m_PrefabResoucePath);
 
     StartCoroutine(TestRoutine());
   }

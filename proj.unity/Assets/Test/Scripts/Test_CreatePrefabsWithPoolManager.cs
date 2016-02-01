@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class Test_DeallocateWithComponent : MonoBehaviour
+public class Test_CreatePrefabsWithPoolManager : MonoBehaviour
 {
   private const string PREFAB_PATH = "Prefabs/Cube [Auto Deallocate]";
   private GameObject m_Prefab;
@@ -26,15 +26,15 @@ public class Test_DeallocateWithComponent : MonoBehaviour
 
       Debug.Log("has Pool: " + (pooled.pool != null));
 
-      go.transform.SetParent(m_Parent);
+      //go.transform.SetParent(m_Parent);
 
 
       yield return new WaitForSeconds(0.5f);
     }
-
+    Debug.Log(m_Parent.childCount);
     if (m_Parent.childCount < 5)
     {
-      Debug.Log(m_Parent.childCount);
+  
       //We should just reuse the same object
       IntegrationTest.Pass();
     }
