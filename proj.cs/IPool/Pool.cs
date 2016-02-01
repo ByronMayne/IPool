@@ -6,14 +6,9 @@ namespace PoolSystem
   public class Pool
   {
     /// <summary>
-    /// The head object for our Allocated objects 
-    /// </summary>
-    private PooledObjectHead m_AllocatedHead = null;
-
-    /// <summary>
     /// The head object for are deallocated objects 
     /// </summary>
-    private PooledObjectHead m_DeallocatedHead = null;
+    private PooledObjectStack m_DeallocatedStack = null;
 
     /// <summary>
     /// The size of our current pool. 
@@ -33,7 +28,7 @@ namespace PoolSystem
     /// <summary>
     /// The path to the resources folder for this asset. 
     /// </summary>
-    private string m_ResourcePath; 
+    private string m_ResourcePath;
 
     /// <summary>
     /// The file path to this pools prefab in the resources folder.
@@ -52,12 +47,11 @@ namespace PoolSystem
       m_ResourcePath = resourcePath;
       m_Prefab = Resources.Load<GameObject>(resourcePath);
 
-      if(m_Prefab == null)
+      if (m_Prefab == null)
       {
         throw new System.ArgumentNullException("No prefab could be loaded at the path '" + resourcePath + "'");
       }
-      m_AllocatedHead = new PooledObjectHead(this);
-      m_DeallocatedHead = new PooledObjectHead(this);
+      m_DeallocatedStack = new PooledObjectStack(this);
     }
 
     /// <summary>
@@ -86,28 +80,23 @@ namespace PoolSystem
     /// <param name="iPooledObject">The item you want to deallocate.</param>
     public void Deallocate(IPooledObject iPooledObject)
     {
-      m_CurrentPoolSize--; 
+      m_CurrentPoolSize--;
       iPooledObject.OnDeallocated();
       iPooledObject.gameObject.SetActive(false);
-      iPooledObject.RemoveLink();
-      m_DeallocatedHead.PushHead(iPooledObject);
+      m_DeallocatedStack.Push(iPooledObject);
     }
 
     public void PrintQueue()
     {
-      IPooledObject iterator = m_DeallocatedHead;
+      IPooledObject iterator = m_DeallocatedStack.Peek();
 
       string printOut = "";
 
       do
       {
-        if(iterator is PooledObjectHead)
+        if (iterator is PooledObjectStack)
         {
           printOut += "{h}";
-        }
-        else if (iterator is PooledObjectTail)
-        {
-          printOut += "{t}";
         }
         else
         {
@@ -116,7 +105,7 @@ namespace PoolSystem
         iterator = iterator.next;
       }
       while (iterator.next != null);
-      
+
     }
 
     /// <summary>
@@ -126,8 +115,7 @@ namespace PoolSystem
     /// <returns>The next available object or creates a new one.</returns>
     internal GameObject GetNextAvaiable()
     {
-      IPooledObject poolObj = m_DeallocatedHead.PopHead();
-      m_AllocatedHead.PushHead(poolObj);
+      IPooledObject poolObj = m_DeallocatedStack.Pop();
       poolObj.gameObject.SetActive(true);
       poolObj.pool = this;
       return poolObj.gameObject;
@@ -187,13 +175,9 @@ namespace PoolSystem
         throw new System.NullReferenceException(newObj.name + " does not have a PooledObject component at it's root level");
       }
 
-      if (shouldAllocate)
+      if (!shouldAllocate)
       {
-        m_AllocatedHead.PushHead(linkedObject);
-      }
-      else
-      {
-        m_DeallocatedHead.PushHead(linkedObject);
+        m_DeallocatedStack.Push(linkedObject);
       }
 
       m_CurrentPoolSize++;
@@ -208,7 +192,7 @@ namespace PoolSystem
     /// </summary>
     internal void Update()
     {
-      if(m_CurrentPoolSize < m_TargetPoolSize)
+      if (m_CurrentPoolSize < m_TargetPoolSize)
       {
         CreatePooledObject(shouldAllocate: false);
       }

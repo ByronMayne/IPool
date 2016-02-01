@@ -35,7 +35,7 @@
   <ItemGroup>
     <Compile Include="Pooled Object\IPooledObject.cs" />
     <Compile Include="Pool.cs" />
-    <Compile Include="Pooled Object\PooledObjectAnchors.cs" />
+    <Compile Include="Pooled Object\PooledObjectStack.cs" />
     <Compile Include="PoolManager.cs" />
     <Compile Include="Pooled Object\PooledObject.cs" />
     <Compile Include="PoolBehaviour.cs" />

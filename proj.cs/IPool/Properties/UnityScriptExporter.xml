@@ -23,6 +23,9 @@
   </Target>
   <!-- This gets called once for every file inside the SourceCode "array" -->
   <!-- @(SourceCode) are items defined in the .cspoj. Every script you see is a SourceCode item -->
+  <Target Name="BeforeBuild">
+    <RemoveDir Condition="Exists('$(UnityProjectPath)')" Directories="$(UnityProjectPath)"/>
+  </Target>
   <Target Name="CopyFileToUnityProject" Inputs="@(SourceFiles)" Outputs="@(SourceFiles.Dummy)">
     <Message Text="Copying | $([MSBuild]::MakeRelative($(ProjectDir), %(SourceFiles.Identity)))" Importance="high"/>
     <Copy SourceFiles="%(SourceFiles.Identity)" DestinationFiles="$(UnityProjectPath)$([MSBuild]::MakeRelative($(ProjectDir), %(SourceFiles.Identity)))"/>

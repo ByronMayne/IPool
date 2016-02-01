@@ -8,7 +8,7 @@ namespace PoolSystem
   {
     private int m_ID = 0;
 
-    private static int m_NextID; 
+    private static int m_NextID;
 
     private Pool m_Pool;
 
@@ -23,10 +23,6 @@ namespace PoolSystem
 
     #region -= IPooledObject [LinkedList] =-
     /// <summary>
-    /// The IPooledObject item before this one. 
-    /// </summary>
-    private IPooledObject m_Previous;
-    /// <summary>
     /// The IPooledObject item after this one. 
     /// </summary>
     private IPooledObject m_Next;
@@ -40,48 +36,18 @@ namespace PoolSystem
       set { m_Next = value; }
     }
 
-    /// <summary>
-    /// Get or set our previous IPooledObject
-    /// </summary>
-    IPooledObject IPooledObject.previous
-    {
-      get { return m_Previous; }
-      set { m_Previous = value; }
-    }
-
     protected virtual void Start()
     {
       m_ID = m_NextID;
       m_NextID++;
     }
 
-    /// <summary>
-    /// Removes this IPooledObject from the linked list.
-    /// </summary>
-    void IPooledObject.RemoveLink()
-    {
-      IPooledObject list = this;
-      list.previous.next = list.next;
-      list.next.previous = list.previous;
-    }
-
-    void IPooledObject.InsertLinkAfter(IPooledObject list)
-    {
-      IPooledObject @this = this;
-
-      @this.next = list.next;
-
-      list.next.previous = @this;
-
-      list.next = @this;
-    }
     #endregion 
-
     public int poolInstanceID
     {
       get
       {
-        if(m_ID == -1)
+        if (m_ID == -1)
         {
           m_ID = m_NextID;
           m_NextID++;
@@ -130,8 +96,6 @@ namespace PoolSystem
         return;
       }
 #endif
-
-      ((IPooledObject)this).RemoveLink();
     }
   }
 }
