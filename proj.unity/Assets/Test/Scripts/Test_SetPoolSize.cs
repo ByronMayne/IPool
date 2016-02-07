@@ -12,13 +12,13 @@ public class Test_SetPoolSize : MonoBehaviour
   public void OnEnable()
   {
     m_Pool = PoolManager.CreatePool(PrefabPaths.SPHERE_PATH, poolSize: m_PoolCount, parent: transform);
-
     StartCoroutine(TestQueueInit());
   }
 
   private IEnumerator TestQueueInit()
   {
-    yield return new WaitForSeconds(2);
+
+    yield return new WaitForSeconds(2f);
 
     if(transform.childCount == m_PoolCount)
     {

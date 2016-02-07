@@ -7,11 +7,9 @@ public class Test_CreatePrefabsWithPoolManager : MonoBehaviour
 
   private GameObject m_Prefab;
   private Pool m_Pool;
-  private Transform m_Parent;
 
   public void Start()
   {
-    m_Parent = new GameObject("Deallocate Parent").transform;
     StartCoroutine(TestRoutine());
   }
 
@@ -24,12 +22,12 @@ public class Test_CreatePrefabsWithPoolManager : MonoBehaviour
 
       PooledObject pooled = go.GetComponent<PooledObject>();
 
-      //go.transform.SetParent(m_Parent);
+      go.transform.SetParent(transform);
 
       yield return new WaitForSeconds(0.5f);
     }
-    Debug.Log(m_Parent.childCount);
-    if (m_Parent.childCount < 5)
+
+    if (transform.childCount < 5)
     {
   
       //We should just reuse the same object
@@ -37,7 +35,7 @@ public class Test_CreatePrefabsWithPoolManager : MonoBehaviour
     }
     else
     {
-      IntegrationTest.Fail(m_Parent.gameObject, "Too many children were spawned. There should only be one.");
+      IntegrationTest.Fail(transform.gameObject, "Too many children were spawned. There should only be one.");
     }
   }
 }
